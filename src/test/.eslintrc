@@ -1,0 +1,20 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "globals": {
+    "_": true,
+    "afterEach": true,
+    "beforeEach": true,
+    "describe": true,
+    "inject": true,
+    "it": true,
+    "module": true,
+    "moment": true,
+    "should": true,
+    "sinon": true,
+    "proxyquire": true,
+    "global": true
+  }
+}
