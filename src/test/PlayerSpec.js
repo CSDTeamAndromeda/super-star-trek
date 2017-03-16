@@ -19,7 +19,7 @@ describe('Player', () => {
 
         player.takeTurn()
 
-        input.should.have.been.called.once
+        input.should.have.been.calledOnce
         shield.isActive.should.be.true
     })
 
@@ -31,7 +31,7 @@ describe('Player', () => {
 
         player.takeTurn()
 
-        input.should.have.been.called.twice
+        input.should.have.been.calledTwice
         player.energy.should.equal(1000)
         shield.energy.should.equal(1000)
     })
@@ -43,7 +43,7 @@ describe('Player', () => {
 
         player.takeTurn()
 
-        input.should.have.been.called.once
+        input.should.have.been.calledOnce
         player.dock.should.have.been.called
     })
 
@@ -149,12 +149,22 @@ describe('Player', () => {
         player.takeTurn()
         player.takeTurn()
 
-        input.should.have.been.called.twice
+        input.should.have.been.calledTwice
         player.rest.should.have.callCount(10)
 
         // After we finish resting, the next call should prompt for input
         player.takeTurn()
 
         input.should.have.callCount(4)
+    })
+
+    it('should repair three times faster while docked', () => {
+        shield.damageAmount = 3
+        shield.repair = sinon.stub()
+        player.isDocked = true
+
+        player.rest()
+
+        shield.repair.should.have.been.calledThrice
     })
 })

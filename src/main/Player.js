@@ -80,6 +80,10 @@ module.exports = class Player {
     }
 
     rest() {
+        if (this.isDocked) {
+            this.subsystems.shield.repair()
+            this.subsystems.shield.repair()    
+        }
         this.subsystems.shield.repair()
     }
 }
