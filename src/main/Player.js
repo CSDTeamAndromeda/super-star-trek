@@ -40,6 +40,13 @@ module.exports = class Player {
                 this.skipTurns = parseInt(this.input('Enter amount of stardates: ')) * 10 - 1
                 break
             }
+            case 'warp': {
+                let warp = this.input('Warp factor: ')
+                let quadrant = this.input('Destination quadrant: ')
+                let sector = this.input('Destination sector: ')
+                this.warp(warp, quadrant, sector)
+                break
+            }
         }
 
         this.rest()
@@ -85,5 +92,11 @@ module.exports = class Player {
             this.subsystems.shield.repair()    
         }
         this.subsystems.shield.repair()
+    }
+
+    warp(factor, quadrant, sector) {
+        factor
+        quadrant
+        sector
     }
 }
