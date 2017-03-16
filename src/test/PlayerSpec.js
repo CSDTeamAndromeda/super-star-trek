@@ -130,4 +130,31 @@ describe('Player', () => {
 
         shield.repair.should.have.been.called
     })
+
+    it('should skip subsequent turns when resting', () => {
+        input.withArgs('Enter command: ').returns('rest')
+        input.withArgs('Enter amount of stardates: ').returns('1')
+
+        player.rest = sinon.stub()
+
+        // A turn is .1 stardates, so this passes 10 stardates
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+        player.takeTurn()
+
+        input.should.have.been.called.twice
+        player.rest.should.have.callCount(10)
+
+        // After we finish resting, the next call should prompt for input
+        player.takeTurn()
+
+        input.should.have.callCount(4)
+    })
 })

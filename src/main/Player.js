@@ -11,9 +11,16 @@ module.exports = class Player {
         this.maxEnergy = 20000
         this.energy = this.maxEnergy
         this.isDocked = false
+        this.skipTurns = 0
     }
 
     takeTurn() {
+        if (this.skipTurns > 0) {
+            this.skipTurns--
+            this.rest()
+            return
+        }
+
         let command = this.input('Enter command: ')
         switch (command) {
             case 'raise': {
@@ -29,7 +36,13 @@ module.exports = class Player {
                 this.dock()
                 break
             }
+            case 'rest': {
+                this.skipTurns = parseInt(this.input('Enter amount of stardates: ')) * 10 - 1
+                break
+            }
         }
+
+        this.rest()
     }
 
     damage(damageAmount) {

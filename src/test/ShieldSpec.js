@@ -8,18 +8,18 @@ describe('Shield', () => {
     })
 
     it('Should repair shields', () => {
-        shield.damageAmount = 3
+        shield.damageAmount = .3
 
         shield.repair()
-        shield.damageAmount.should.equal(2)
+        shield.damageAmount.should.be.closeTo(.2, .0001)
         shield.isDamaged().should.be.true
 
         shield.repair()
-        shield.damageAmount.should.equal(1)
+        shield.damageAmount.should.be.closeTo(.1, .0001)
         shield.isDamaged().should.be.true
 
         shield.repair()
-        shield.damageAmount.should.equal(0)
+        shield.damageAmount.should.be.closeTo(0, .0001)
         shield.isDamaged().should.be.false
     })
 })
