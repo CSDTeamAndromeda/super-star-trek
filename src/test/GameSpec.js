@@ -26,10 +26,14 @@ describe('Game', () => {
             takeTurn: sinon.stub()
         }]
 
+        game.stardates = 1
+
         game.start()
 
         print.should.have.been.calledWith('Welcome')
         game.players[0].takeTurn.should.have.been.called
+
+        game.stardates.should.equal(0)
     })
 
 })

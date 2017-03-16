@@ -7,14 +7,17 @@ module.exports = class Game {
             new Player(input)
         ]
         this.print = print
+        this.stardates = 30
     }
 
     start() {
         this.print('Welcome')
-        // while (condition) {
-        this.players.forEach(player => {
-            player.takeTurn()
-        })
-        // }
+        while (this.stardates > 0) {
+            this.players.forEach(player => {
+                player.takeTurn()
+            })
+
+            this.stardates--
+        }
     }
 }
