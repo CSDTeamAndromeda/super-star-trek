@@ -12,6 +12,29 @@ describe('Player', () => {
         shields = player.subsystems.shields
     })
 
+    it('should take input and raise shields', () => {
+        let input = sinon.stub().withArgs('Enter command: ').returns('raise')
+
+        player.takeTurn(input)
+
+        input.should.have.been.called.once
+        shields.isActive = true
+    })
+
+    it('should take input and transfer shields', () => {
+        player.energy = 2000
+        shields.energy = 0
+        let input = sinon.stub()
+        input.withArgs('Enter command: ').returns('transfer')
+        input.withArgs('Enter amount to transfer: ').returns('1000')
+
+        player.takeTurn(input)
+
+        input.should.have.been.called.twice
+        player.energy.should.equal(1000)
+        shields.energy.should.equal(1000)
+    })
+
     it('should damage a random subsystem', () => {
         let damageAmount = 9001
         shields.energy = 9000
