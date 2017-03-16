@@ -2,23 +2,24 @@ const _ = require('lodash')
 const Shields = require('./subsystems/Shields')
 
 module.exports = class Player {
-    constructor() {
+    constructor(input) {
         this.subsystems = {
             shields: new Shields()
         }
 
+        this.input = input
         this.energy = 20000
     }
 
-    takeTurn(input) {
-        let command = input('Enter command: ')
+    takeTurn() {
+        let command = this.input('Enter command: ')
         switch (command) {
             case 'raise': {
                 this.raiseShields()
                 break
             }
             case 'transfer': {
-                let energyAmount = parseInt(input('Enter amount to transfer: '))
+                let energyAmount = parseInt(this.input('Enter amount to transfer: '))
                 this.transferShields(energyAmount)
                 break
             }

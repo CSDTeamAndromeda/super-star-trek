@@ -1,9 +1,10 @@
 const Player = require('./Player')
 
 module.exports = class Game {
-    constructor(print) {
+    constructor(print, input) {
+        this.input = input
         this.players = [
-            new Player()
+            new Player(input)
         ]
         this.print = print
     }
