@@ -14,19 +14,22 @@ module.exports = class Player {
         let shields = this.subsystems.shields
 
         if (shields.isActive && !shields.isDamaged) {
-            let damageToInflict = _.min([shields.maxEnergy - shields.energy, damageAmount])
-            if (damageAmount > shields.energy) {
-
-            }
+            let damageToInflict = _.min([shields.energy, damageAmount])
             shields.energy -= damageToInflict
+            damageAmount -= damageToInflict
         }
 
-        let randomSubsystem = _.sample(this.subsystems)
-        randomSubsystem.isDamaged = true
+        if (damageAmount > 0) {
+            let randomSubsystem = _.sample(this.subsystems)
+            randomSubsystem.isDamaged = true
+        }
     }
 
     raiseShields() {
-        this.subsystems.shields.isActive = true
+        let shields = this.subsystems.shields
+        if (!shields.isDamaged) {
+            shields.isActive = true
+        }
     }
 
     transferShields(energyAmount) {
