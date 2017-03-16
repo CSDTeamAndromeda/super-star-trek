@@ -8,7 +8,9 @@ module.exports = class Player {
         }
 
         this.input = input
-        this.energy = 20000
+        this.maxEnergy = 20000
+        this.energy = this.maxEnergy
+        this.isDocked = false
     }
 
     takeTurn() {
@@ -21,6 +23,10 @@ module.exports = class Player {
             case 'transfer': {
                 let energyAmount = parseInt(this.input('Enter amount to transfer: '))
                 this.transferShield(energyAmount)
+                break
+            }
+            case 'dock': {
+                this.dock()
                 break
             }
         }
@@ -39,6 +45,11 @@ module.exports = class Player {
             let randomSubsystem = _.sample(this.subsystems)
             randomSubsystem.isDamaged = true
         }
+    }
+
+    dock() {
+        this.energy = this.maxEnergy
+        this.isDocked = true
     }
 
     raiseShield() {

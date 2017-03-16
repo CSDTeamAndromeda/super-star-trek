@@ -36,6 +36,17 @@ describe('Player', () => {
         shield.energy.should.equal(1000)
     })
 
+    it('should take input and dock', () => {
+        input.withArgs('Enter command: ').returns('dock')
+
+        player.dock = sinon.stub()
+
+        player.takeTurn()
+
+        input.should.have.been.called.once
+        player.dock.should.have.been.called
+    })
+
     it('should damage a random subsystem', () => {
         let damageAmount = 9001
         shield.energy = 9000
@@ -100,5 +111,12 @@ describe('Player', () => {
 
         player.energy.should.equal(0)
         shield.energy.should.equal(1000)
+    })
+
+    it('should dock', () => {
+        player.dock()
+
+        player.energy.should.equal(player.maxEnergy)
+        player.isDocked.should.be.true
     })
 })
