@@ -1,26 +1,20 @@
 {
   "dependencies": {
-    "babel-polyfill": "6.20.0",
     "chai": "3.5.0",
     "chai-as-promised": "6.0.0",
     "eslint": "3.12.0",
     "lodash": "4.17.4",
     "mocha": "3.2.0",
     "prompt-sync": "^4.1.4",
-    "proxyquire": "1.7.10",
     "sinon": "1.17.6",
     "sinon-as-promised": "4.0.2",
     "sinon-chai": "2.8.0"
   },
-  "devDependencies": {
-    "nodemon": "1.11.0"
-  },
-  "main": "src/main/index.js",
+  "main": "./src/main/index.js",
   "scripts": {
-    "start": "node src/main/index.js",
-    "local": "NODE_ENV=local nodemon src/main/index.js",
-    "dev": "NODE_ENV=dev nodemon src/main/index.js",
-    "qa": "NODE_ENV=qa nodemon src/main/index.js",
-    "test": "mocha -r ./src/test/testGlobals.js --recursive ./src/test"
+    "start": "node .",
+    "lint": "eslint ./src/**/*.js",
+    "test": "mocha -r ./src/test/testGlobals.js --recursive ./src/test",
+    "build": "npm run lint && npm run test"
   }
 }
