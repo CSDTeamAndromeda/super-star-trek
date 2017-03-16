@@ -13,8 +13,9 @@
   "main": "./src/main/index.js",
   "scripts": {
     "start": "node .",
-    "lint": "eslint ./src/**/*.js",
-    "test": "mocha -r ./src/test/testGlobals.js --recursive ./src/test",
-    "build": "npm run lint && npm run test"
+    "lint:eslint": "eslint **/*.js",
+    "test:mocha": "mocha -r ./src/test/testGlobals.js --recursive ./src/test",
+    "test": "npm run lint:eslint && npm run test:mocha",
+    "build": "npm test"
   }
 }
