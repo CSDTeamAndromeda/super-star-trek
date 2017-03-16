@@ -11,7 +11,8 @@ module.exports = class Shields extends Subsystem {
 
     repair() {
         if (this.damageAmount > 0) {
-            this.damageAmount--
+            this.damageAmount -= .1
         }
+        this.damageAmount = Math.max(this.damageAmount, 0)
     }
 }
