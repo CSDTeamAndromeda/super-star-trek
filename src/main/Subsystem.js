@@ -1,5 +1,9 @@
 module.exports = class Subsystem {
     constructor() {
-        this.isDamaged = false
+        this.damageAmount = 0
+    }
+
+    isDamaged() {
+        return this.damageAmount > 0
     }
 }

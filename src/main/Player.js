@@ -35,7 +35,7 @@ module.exports = class Player {
     damage(damageAmount) {
         let shield = this.subsystems.shield
 
-        if (shield.isActive && !shield.isDamaged) {
+        if (shield.isActive && !shield.isDamaged()) {
             let damageToInflict = _.min([shield.energy, damageAmount])
             shield.energy -= damageToInflict
             damageAmount -= damageToInflict
@@ -43,7 +43,7 @@ module.exports = class Player {
 
         if (damageAmount > 0) {
             let randomSubsystem = _.sample(this.subsystems)
-            randomSubsystem.isDamaged = true
+            randomSubsystem.damageAmount++
         }
     }
 
@@ -54,7 +54,7 @@ module.exports = class Player {
 
     raiseShield() {
         let shield = this.subsystems.shield
-        if (!shield.isDamaged) {
+        if (!shield.isDamaged()) {
             shield.isActive = true
         }
     }
@@ -64,5 +64,9 @@ module.exports = class Player {
         let energyToTransfer = _.min([shield.maxEnergy - shield.energy, energyAmount])
         shield.energy += energyToTransfer
         this.energy -= energyToTransfer
+    }
+
+    rest() {
+        this.subsystems.shield.repair()
     }
 }

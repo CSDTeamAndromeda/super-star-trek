@@ -55,7 +55,8 @@ describe('Player', () => {
 
         player.damage(damageAmount)
 
-        _.some(player.subsystems, {isDamaged: true}).should.be.true
+        
+        _.some(player.subsystems, subsystem => subsystem.isDamaged()).should.be.true
     })
 
     it('should damage shield but not deplete them', () => {
@@ -87,7 +88,7 @@ describe('Player', () => {
     })
 
     it('should not raise shield if they are damaged', () => {
-        shield.isDamaged = true
+        shield.damageAmount = 1
 
         player.raiseShield()
 
@@ -118,5 +119,15 @@ describe('Player', () => {
 
         player.energy.should.equal(player.maxEnergy)
         player.isDocked.should.be.true
+    })
+
+    it('should rest repair a damage subsystem', () => {
+        shield = {} 
+        shield.repair = sinon.stub()
+        player.subsystems.shield = shield
+
+        player.rest()
+
+        shield.repair.should.have.been.called
     })
 })

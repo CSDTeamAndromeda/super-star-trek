@@ -8,4 +8,10 @@ module.exports = class Shields extends Subsystem {
         this.maxEnergy = 10000
         this.energy = this.minEnergy
     }
+
+    repair() {
+        if (this.damageAmount > 0) {
+            this.damageAmount--
+        }
+    }
 }
