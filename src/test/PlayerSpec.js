@@ -1,21 +1,23 @@
 describe('Player', () => {
     let Player
 
+    let input
     let player
     let shields
 
     beforeEach(() => {
-        Player = require('../main/Player')
+        input = sinon.stub()
 
-        player = new Player()
+        Player = require('../main/Player')
+        player = new Player(input)
 
         shields = player.subsystems.shields
     })
 
     it('should take input and raise shields', () => {
-        let input = sinon.stub().withArgs('Enter command: ').returns('raise')
+        input.withArgs('Enter command: ').returns('raise')
 
-        player.takeTurn(input)
+        player.takeTurn()
 
         input.should.have.been.called.once
         shields.isActive = true
@@ -24,11 +26,10 @@ describe('Player', () => {
     it('should take input and transfer shields', () => {
         player.energy = 2000
         shields.energy = 0
-        let input = sinon.stub()
         input.withArgs('Enter command: ').returns('transfer')
         input.withArgs('Enter amount to transfer: ').returns('1000')
 
-        player.takeTurn(input)
+        player.takeTurn()
 
         input.should.have.been.called.twice
         player.energy.should.equal(1000)
