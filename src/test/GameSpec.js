@@ -1,6 +1,6 @@
 describe('Game', () => {
 
-    let Game = require('../main/Game')
+    let Game
 
     let game
     let players
@@ -8,6 +8,7 @@ describe('Game', () => {
 
     beforeEach(() => {
         print = sinon.stub()
+        Game = require('../main/Game')
         game = new Game(print, players)
     })
 

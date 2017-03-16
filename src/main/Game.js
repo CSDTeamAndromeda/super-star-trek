@@ -1,4 +1,4 @@
-const Player = class Player {}
+const Player = require('./Player')
 
 module.exports = class Game {
     constructor(print) {
@@ -16,5 +16,4 @@ module.exports = class Game {
         })
         // }
     }
-
 }
