@@ -206,14 +206,14 @@ describe('Player', () => {
     it('should take input and warp', () => {
         input.withArgs('Enter command: ').returns('warp')
         input.withArgs('Warp factor: ').returns('1')
-        input.withArgs('Destination quadrant: ').returns('2')
-        input.withArgs('Destination sector: ').returns('3')
+        input.withArgs('Destination quadrant (x y): ').returns('2 3')
+        input.withArgs('Destination sector (x y): ').returns('3 4')
 
         player.warp = sinon.stub()
 
         player.takeTurn()
 
-        player.warp.should.have.been.calledWith('1', '2', '3')
+        player.warp.should.have.been.calledWith('1', {x: 2, y: 3}, {x: 3, y: 4})
         input.should.have.callCount(4)
     })
 
