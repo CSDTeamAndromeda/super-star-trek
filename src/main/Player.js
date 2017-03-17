@@ -53,9 +53,9 @@ module.exports = class Player {
             }
             case 'warp': {
                 let warp = this.input('Warp factor: ')
-                let quadrant = this.input('Destination quadrant: ')
-                let sector = this.input('Destination sector: ')
-                this.warp(warp, quadrant, sector)
+                let quadrant = this.input('Destination quadrant (x y): ').split(' ').map(n => parseInt(n))
+                let sector = this.input('Destination sector (x y): ').split(' ').map(n => parseInt(n))
+                this.warp(warp, {x: quadrant[0], y: quadrant[1]}, {x: sector[0], y: sector[1]})
                 break
             }
         }
@@ -104,5 +104,11 @@ module.exports = class Player {
         factor
         quadrant
         sector
+        // let destinationQuadrant = galaxy.quadrants[quadrant[0]][quadrant[1]]
+        // let destinationSector = destinationQuadrant.sectors[sector[0]][sector[1]]
+
+        // let distance = Math.sqrt( .. )
+
+        // let time = sectors / Math.pow(factor, 2)
     }
 }
