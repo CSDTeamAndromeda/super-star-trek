@@ -114,7 +114,15 @@ describe('Player', () => {
         shield.energy.should.equal(1000)
     })
 
-    it('should dock', () => {
+    it('should dock at an adjacent starbase', () => {
+        player.currentQuadrant = {
+            getAdjacentSectorsTo: sinon.stub().returns([
+                {
+                    hasStarbase: true
+                }
+            ])
+        }
+
         player.dock()
 
         player.energy.should.equal(player.maxEnergy)
@@ -180,5 +188,12 @@ describe('Player', () => {
 
         player.warp.should.have.been.calledWith('1', '2', '3')
         input.should.have.callCount(4)
+    })
+
+    it('should not dock if there is no adjacent starbase', () => {
+        player.dock()
+
+        player.energy.should.equal(player.energy)
+        player.isDocked.should.be.false
     })
 })
