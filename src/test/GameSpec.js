@@ -22,6 +22,10 @@ describe('Game', () => {
     })
 
     it('should process turns for each player', () => {
+        game.currentGalaxy = {
+            setupGalaxy: sinon.stub()
+        }
+
         game.players = [{
             takeTurn: sinon.stub()
         }]
@@ -31,6 +35,7 @@ describe('Game', () => {
         game.start()
 
         print.should.have.been.calledWith('Welcome')
+        game.currentGalaxy.setupGalaxy.should.have.been.calledWith(sinon.match.array)
         game.players[0].takeTurn.should.have.been.called
 
         game.stardates.should.equal(0)

@@ -9,7 +9,7 @@ module.exports = class Player {
         }
 
         this.input = input
-        this.maxEnergy = 20000
+        this.maxEnergy = 80000
         this.energy = this.maxEnergy
         this.isDocked = false
         this.skipTurns = 0
@@ -74,7 +74,7 @@ module.exports = class Player {
     }
 
     dock() {
-        if (_.find(this.currentQuadrant.getAdjacentSectorsTo(this.currentSector), {hasStarbase: true})) {
+        if (_.find(this.currentQuadrant.getAdjacentSectorsTo(this.currentSector), {entity: 'starbase'})) {
             this.energy = this.maxEnergy
             this.isDocked = true
         }

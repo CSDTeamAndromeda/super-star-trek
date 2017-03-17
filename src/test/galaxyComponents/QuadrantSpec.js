@@ -39,4 +39,35 @@ describe('Quadrant', () => {
 
         adjacentSectors.should.deep.equal([topLeft, top, topRight, left, right, bottomLeft, bottom, bottomRight])
     })
+
+    it('should get entities', () => {
+        let sectors = [
+            {
+                entity: 'starbase'
+            },
+            {
+                entity: 'klingon'
+            }
+        ]
+        quadrant.flattenedSectors = sectors
+
+        quadrant.getEntities().should.deep.equal(['starbase', 'klingon'])
+    })
+
+    it('should get all entities count', () => {
+        let sectors = [
+            {
+                entity: 'starbase'
+            },
+            {
+                entity: 'klingon'
+            }
+        ]
+
+        quadrant.flattenedSectors = sectors
+        quadrant.getAllEntitiesCount().should.deep.equal({
+            starbase: 1,
+            klingon: 1
+        })
+    })
 })

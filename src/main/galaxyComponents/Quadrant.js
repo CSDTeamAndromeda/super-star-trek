@@ -32,4 +32,12 @@ module.exports = class Quadrant {
 
         return [topLeft, top, topRight, left, right, bottomLeft, bottom, bottomRight]
     }
+
+    getEntities() {
+        return _.filter(_.map(this.flattenedSectors, 'entity'))
+    }
+
+    getAllEntitiesCount() {
+        return _.countBy(this.getEntities())
+    }
 }
