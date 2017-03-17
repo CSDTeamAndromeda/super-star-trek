@@ -27,12 +27,20 @@ module.exports = class Player {
         let command = this.input('Enter command: ')
         switch (command) {
             case 'raise': {
-                this.raiseShield()
+                this.subsystems.shield.raise()
+                break
+            }
+            case 'lower': {
+                this.subsystems.shield.lower()
                 break
             }
             case 'transfer': {
-                let energyAmount = parseInt(this.input('Enter amount to transfer: '))
-                this.transferShield(energyAmount)
+                let energy = parseInt(this.input('Enter amount to transfer: '))
+                if (energy > 0) {
+                    this.transferEnergyToShield(energy)
+                } else {
+                    this.transferEnergyFromShield(-energy)
+                }
                 break
             }
             case 'dock': {
@@ -57,14 +65,9 @@ module.exports = class Player {
 
     damage(damageAmount) {
         let shield = this.subsystems.shield
+        let damage = shield.absorbAttackAndReturnDamage(damageAmount)
 
-        if (shield.isActive && !shield.isDamaged()) {
-            let damageToInflict = _.min([shield.energy, damageAmount])
-            shield.energy -= damageToInflict
-            damageAmount -= damageToInflict
-        }
-
-        if (damageAmount > 0) {
+        if (damage > 0) {
             let randomSubsystem = _.sample(this.subsystems)
             randomSubsystem.damageAmount++
         }
@@ -77,18 +80,16 @@ module.exports = class Player {
         }
     }
 
-    raiseShield() {
-        let shield = this.subsystems.shield
-        if (!shield.isDamaged()) {
-            shield.isActive = true
-        }
+    transferEnergyToShield(energy) {
+        let { shield } = this.subsystems
+        let extra = shield.addEnergyAndReturnExtra(energy)
+        this.energy = this.energy - energy + extra
     }
 
-    transferShield(energyAmount) {
-        let shield = this.subsystems.shield
-        let energyToTransfer = _.min([shield.maxEnergy - shield.energy, energyAmount])
-        shield.energy += energyToTransfer
-        this.energy -= energyToTransfer
+    transferEnergyFromShield(energy) {
+        let { shield } = this.subsystems
+        let took = shield.takeEnergy(energy)
+        this.energy += took
     }
 
     rest() {
