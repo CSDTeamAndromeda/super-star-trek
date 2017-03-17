@@ -1,6 +1,6 @@
 const Subsystem = require('../Subsystem')
 
-module.exports = class Shields extends Subsystem {
+module.exports = class Shield extends Subsystem {
     constructor() {
         super()
         this.isActive = false
@@ -9,10 +9,38 @@ module.exports = class Shields extends Subsystem {
         this.energy = this.minEnergy
     }
 
-    repair() {
-        if (this.damageAmount > 0) {
-            this.damageAmount -= .1
+    raise() {
+        this.isActive = this.energy > 0 && !this.isDamaged()
+    }
+
+    lower() {
+        this.isActive = false
+    }
+
+    takeEnergy(energy) {
+        let taken = Math.min(this.energy, energy)
+        this.energy -= taken
+        if (this.energy === 0) {
+            this.lower()
         }
-        this.damageAmount = Math.max(this.damageAmount, 0)
+        return taken
+    }
+
+    addEnergyAndReturnExtra(energy) {
+        let initialEnergy = this.energy
+        this.energy = Math.min(this.maxEnergy, this.energy + energy)
+        return energy - this.energy + initialEnergy
+    }
+
+    absorbAttackAndReturnDamage(attackEnergy) {
+        if (this.isActive) {
+            let taken = this.takeEnergy(attackEnergy)
+            return taken < attackEnergy ? attackEnergy - taken : 0
+        }
+        return attackEnergy
+    }
+
+    repair() {
+        this.damageAmount = Math.max(this.damageAmount - .1, 0)
     }
 }

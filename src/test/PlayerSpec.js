@@ -11,7 +11,17 @@ describe('Player', () => {
         Player = require('../main/Player')
         player = new Player(input)
 
-        shield = player.subsystems.shield
+        shield = {
+            damageAmount: 0,
+            isDamaged: sinon.stub(),
+            raise: sinon.stub(),
+            lower: sinon.stub(),
+            takeEnergy: sinon.stub(),
+            addEnergyAndReturnExtra: sinon.stub(),
+            absorbAttackAndReturnDamage: sinon.stub(),
+            repair: sinon.stub()
+        }
+        player.subsystems = { shield }
     })
 
     it('should take input and raise shield', () => {
@@ -20,20 +30,43 @@ describe('Player', () => {
         player.takeTurn()
 
         input.should.have.been.calledOnce
-        shield.isActive.should.be.true
+        shield.raise.should.have.been.called
     })
 
-    it('should take input and transfer shield', () => {
-        player.energy = 2000
-        shield.energy = 0
-        input.withArgs('Enter command: ').returns('transfer')
-        input.withArgs('Enter amount to transfer: ').returns('1000')
+    it('should take input and lower shield', () => {
+        input.withArgs('Enter command: ').returns('lower')
 
         player.takeTurn()
 
-        input.should.have.been.calledTwice
-        player.energy.should.equal(1000)
-        shield.energy.should.equal(1000)
+        input.should.have.been.calledOnce
+        shield.lower.should.have.been.called
+    })
+
+    describe('transfer command', () => {
+        it('should transfer player energy to shield', () => {
+            player.energy = 2000
+            input.withArgs('Enter command: ').returns('transfer')
+            input.withArgs('Enter amount to transfer: ').returns('1000')
+            shield.addEnergyAndReturnExtra.withArgs(1000).returns(500)
+
+            player.takeTurn()
+
+            input.should.have.been.calledTwice
+            player.energy.should.equal(1500)
+        })
+
+        it('should transfer shield energy to player', () => {
+            player.energy = 0
+            input.withArgs('Enter command: ').returns('transfer')
+            input.withArgs('Enter amount to transfer: ').returns('-1000')
+            shield.takeEnergy.returns(500)
+
+            player.takeTurn()
+
+            input.should.have.been.calledTwice
+            player.energy.should.equal(500)
+            shield.takeEnergy.should.have.been.calledWith(1000)
+        })
     })
 
     it('should take input and dock', () => {
@@ -49,14 +82,12 @@ describe('Player', () => {
 
     it('should damage a random subsystem', () => {
         let damageAmount = 9001
-        shield.energy = 9000
-
-        shield.isActive = true
+        shield.absorbAttackAndReturnDamage.returns(1)
 
         player.damage(damageAmount)
 
-        
-        _.some(player.subsystems, subsystem => subsystem.isDamaged()).should.be.true
+        shield.absorbAttackAndReturnDamage(9001)
+        _.some(player.subsystems, subsystem => subsystem.damageAmount > 0).should.be.true
     })
 
     it('should damage shield but not deplete them', () => {
@@ -81,37 +112,33 @@ describe('Player', () => {
         _.some(player.subsystems, {isDamaged: true}).should.be.false
     })
 
-    it('should raise shield if they are not damaged', () => {
-        player.raiseShield()
+    describe('transfer command', () => {
+        it('should only transfer enough energy to max out shield', () => {
+            player.energy = 3000
+            shield.addEnergyAndReturnExtra.returns(1000)
 
-        shield.isActive.should.be.true
-    })
+            player.transferEnergyToShield(3000)
 
-    it('should not raise shield if they are damaged', () => {
-        shield.damageAmount = 1
+            player.energy.should.equal(1000)
+        })
 
-        player.raiseShield()
+        it('should transfer an exact amount of energy to shield', () => {
+            player.energy = 1000
+            shield.addEnergyAndReturnExtra.returns(0)
 
-        shield.isActive.should.be.false
-    })
+            player.transferEnergyToShield(1000)
 
-    it('should only transfer enough energy to max out shield', () => {
-        player.energy = 3000
-        shield.energy = 8000
+            player.energy.should.equal(0)
+        })
 
-        player.transferShield(3000)
+        it('should transfer energy from shield to player', () => {
+            player.energy = 1000
+            shield.takeEnergy.withArgs(200).returns(100)
 
-        player.energy.should.equal(1000)
-        shield.energy.should.equal(10000)
-    })
+            player.transferEnergyFromShield(200)
 
-    it('should transfer an exact amount of energy', () => {
-        player.energy = 1000
-
-        player.transferShield(1000)
-
-        player.energy.should.equal(0)
-        shield.energy.should.equal(1000)
+            player.energy.should.equal(1100)
+        })
     })
 
     it('should dock at an adjacent starbase', () => {
