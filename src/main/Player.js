@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const Shield = require('./subsystems/Shield')
+const galaxy = require('./galaxy')
 
 module.exports = class Player {
     constructor(input) {
@@ -12,6 +13,8 @@ module.exports = class Player {
         this.energy = this.maxEnergy
         this.isDocked = false
         this.skipTurns = 0
+        this.currentQuadrant = galaxy.getQuadrantAt(0)
+        this.currentSector = this.currentQuadrant.getSectorAt(0)
     }
 
     takeTurn() {
@@ -68,8 +71,10 @@ module.exports = class Player {
     }
 
     dock() {
-        this.energy = this.maxEnergy
-        this.isDocked = true
+        if (_.find(this.currentQuadrant.getAdjacentSectorsTo(this.currentSector), {hasStarbase: true})) {
+            this.energy = this.maxEnergy
+            this.isDocked = true
+        }
     }
 
     raiseShield() {
