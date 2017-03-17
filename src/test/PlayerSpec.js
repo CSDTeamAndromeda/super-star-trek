@@ -145,7 +145,7 @@ describe('Player', () => {
         player.currentQuadrant = {
             getAdjacentSectorsTo: sinon.stub().returns([
                 {
-                    hasStarbase: true
+                    entity: 'starbase'
                 }
             ])
         }
